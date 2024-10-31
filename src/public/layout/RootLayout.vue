@@ -7,8 +7,10 @@ import AsideMenu from '../components/AsideMenu.vue'
     <div class="shrink-0 bg-[#272727] text-white p-6 flex flex-col">
       <AsideMenu />
     </div>
-    <div class="w-full h-full p-6 bg-white text-gray-700">
-      <router-view></router-view>
+    <div class="w-full h-full py-12 px-12 bg-white text-gray-700">
+      <div class="max-w-6xl mx-auto">
+        <router-view></router-view>
+      </div>
     </div>
   </main>
 </template>

@@ -1,5 +1,13 @@
 <template>
-  <PanelMenu :model="items" class="w-full md:w-80 scroll-auto h-full">
+  <PanelMenu
+    :model="items"
+    class="w-full md:w-80 scroll-auto h-full"
+    :pt="{
+      panel: '!bg-neutral-900 !border-0',
+      headerContent: 'hover:!bg-neutral-800',
+      itemContent: 'hover:!bg-neutral-800',
+    }"
+  >
     <template #item="{ item }">
       <router-link
         v-if="item.route"
