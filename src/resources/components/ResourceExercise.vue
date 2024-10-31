@@ -2,8 +2,11 @@
 import Image from 'primevue/image'
 import InputText from 'primevue/inputtext'
 import { ref } from 'vue'
+import ResourceChatbotModal from './ResourceChatbotModal.vue'
 
 const prompt = ref('')
+
+const modalVisible = ref(false)
 </script>
 
 <template>
@@ -30,12 +33,17 @@ const prompt = ref('')
         <InputText type="text" v-model="prompt" class="!w-full" />
         <small class="text-xs font-medium absolute top-full"
           >¿Necesitas ayuda?
-          <span class="underline cursor-pointer"
+          <span class="underline cursor-pointer" @click="modalVisible = true"
             >Mira la resolución paso a paso con la IA</span
           ></small
         >
       </div>
       <Button class="shrink-0">Enviar</Button>
     </div>
+
+    <ResourceChatbotModal
+      :visible="modalVisible"
+      :onClose="() => (modalVisible = false)"
+    />
   </div>
 </template>
