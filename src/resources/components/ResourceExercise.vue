@@ -5,7 +5,6 @@ import { ref } from 'vue'
 import ResourceChatbotModal from './ResourceChatbotModal.vue'
 
 const prompt = ref('')
-
 const modalVisible = ref(false)
 </script>
 

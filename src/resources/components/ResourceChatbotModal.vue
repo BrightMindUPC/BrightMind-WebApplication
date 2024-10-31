@@ -62,6 +62,9 @@ const handleSend = () => {
       headerActions: 'ml-auto',
     }"
   >
+    <template #closeicon>
+      <Button icon="pi pi-times" class="shrink-0" @click="onClose" />
+    </template>
     <div class="flex flex-col w-full gap-8 max-h-80 overflow-y-scroll">
       <div
         v-for="chat in chatList"
