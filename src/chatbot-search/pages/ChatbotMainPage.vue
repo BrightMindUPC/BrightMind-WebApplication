@@ -1,6 +1,5 @@
 <template>
     <div class="flex flex-col h-screen">
-      <!-- Greeting Section -->
       <div class="mb-4">
         <div class="text-lg font-semibold">Hola, {{ userName }}</div>
         <div class="text-gray-600">¿En qué podemos ayudarte el día de hoy?</div>
@@ -9,7 +8,6 @@
         </p>
       </div>
     
-      <!-- Recommendation Buttons -->
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-4">
         <Button label="Aprende a solucionar matrices" icon="pi pi-calculator" class="p-button-outlined" />
         <Button label="Ayúdame con mi tarea de matemáticas" icon="pi pi-chart-bar" class="p-button-outlined" />
@@ -18,7 +16,6 @@
         <Button label="Ejercicios de derivación" icon="pi pi-cog" class="p-button-outlined" />
       </div>
     
-      <!-- Chat History Section -->
       <div ref="chatContainer" class="flex-grow overflow-y-auto bg-gray-50 p-4 rounded-md">
         <div v-for="(message, index) in messages" :key="index" class="mb-2">
           <div :class="message.isUser ? 'text-right' : 'text-left'">
@@ -30,7 +27,6 @@
         </div>
       </div>
     
-      <!-- Input Section, Fixed to Bottom -->
       <div class="flex items-center mt-2 w-full p-4 bg-white border-t border-gray-200 sticky bottom-0">
         <InputText 
           v-model="newMessage" 
@@ -56,16 +52,13 @@
       sendMessage() {
         if (this.newMessage.trim() === "") return;
   
-        // Add user's message to chat
         this.messages.push({ text: this.newMessage, isUser: true });
   
-        // Simulate bot response
         setTimeout(() => {
           this.messages.push({ text: "Esta es una respuesta generada.", isUser: false });
           this.scrollToBottom();
         }, 500);
   
-        // Clear input
         this.newMessage = "";
         this.scrollToBottom();
       },
