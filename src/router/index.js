@@ -3,6 +3,7 @@ import NotFoundPage from '../public/pages/NotFoundPage.vue'
 import ExamplePage from '../public/pages/ExamplePage.vue'
 import RootLayout from '../public/layout/RootLayout.vue'
 import ResourceDetailPage from '../resources/pages/ResourceDetailPage.vue'
+import ChatbotMainPage from '../chatbot-search/pages/ChatbotMainPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -23,6 +24,10 @@ const router = createRouter({
               component: ResourceDetailPage,
             },
           ],
+        },
+        {
+          path: '/chatbot',  
+          component: ChatbotMainPage,
         },
       ],
     },

@@ -4,6 +4,8 @@ import App from './App.vue'
 import PrimeVue from 'primevue/config'
 import Button from 'primevue/button'
 import PanelMenu from 'primevue/panelmenu'
+import InputText from 'primevue/inputtext'
+import Card from 'primevue/card'
 import router from './router'
 
 import Aura from '@primevue/themes/aura'
@@ -40,4 +42,6 @@ app.use(router)
 
 app.component('Button', Button)
 app.component('PanelMenu', PanelMenu)
+app.component('InputText', InputText)
+app.component('Card', Card)
 app.mount('#app')
