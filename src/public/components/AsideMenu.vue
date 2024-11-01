@@ -69,6 +69,7 @@ const items = ref([
   {
     label: 'Brightmind AI',
     icon: 'pi pi-microchip-ai',
+    command: () => router.push('/chatbot'),
     items: [
       {
         label: 'Explicame de los integrales...',
