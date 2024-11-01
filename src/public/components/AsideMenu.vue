@@ -78,7 +78,7 @@ const items = ref([
   {
     label: 'Recursos educativos',
     icon: 'pi pi-folder',
-    command: () => router.push('/recursos-educativos'),
+    command: () => router.push('/educational-resources'),
   },
   {
     label: 'Soporte técnico',

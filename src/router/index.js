@@ -4,6 +4,7 @@ import ExamplePage from '../public/pages/ExamplePage.vue'
 import RootLayout from '../public/layout/RootLayout.vue'
 import ResourceDetailPage from '../resources/pages/ResourceDetailPage.vue'
 import ChatbotMainPage from '../chatbot-search/pages/ChatbotMainPage.vue'
+import EducationalResources from '../public/pages/EducationalResources.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -17,16 +18,16 @@ const router = createRouter({
           component: ExamplePage,
         },
         {
-          path: '/resources',
-          children: [
-            {
-              path: ':id',
-              component: ResourceDetailPage,
-            },
-          ],
+          path: '/educational-resources',
+          component: EducationalResources,
         },
         {
-          path: '/chatbot',  
+          path: '/educational-resources/:id',
+          component: ResourceDetailPage,
+          name: 'ResourceDetailPage',
+        },
+        {
+          path: '/chatbot',
           component: ChatbotMainPage,
         },
       ],
