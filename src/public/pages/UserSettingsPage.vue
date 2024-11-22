@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getUserById, updateUser } from '@/services/userService'
-import { sendNotification } from '@/services/notificationService'
+import { getUserById, updateUser } from '../../services/userService'
+import { sendNotification } from '../../services/notificationService'
+
 
 // Enum de grados con traducción al español
 const grades = {

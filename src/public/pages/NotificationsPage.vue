@@ -24,7 +24,7 @@
   
   <script setup>
   import { ref, onMounted } from 'vue'
-  import { fetchNotifications, markAsRead } from '@/services/notificationService'
+  import { fetchNotifications, markAsRead } from '../../services/notificationService'
   
   const notifications = ref([])
   
