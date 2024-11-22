@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@primevue/themes": "^4.1.1",
+    "brightming-web-application": "file:",
     "primeicons": "^7.0.0",
     "primevue": "^4.1.1",
     "tailwindcss-primeui": "^0.3.4",
