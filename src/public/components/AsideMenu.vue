@@ -46,13 +46,14 @@
         src="https://www.strasys.uk/wp-content/uploads/2022/02/Depositphotos_484354208_S.jpg"
         alt="Brightmind AI"
       />
-      <p class="font-semibold w-full">Pepito Flores</p>
+      <p class="font-semibold w-full">{{ username }}</p>
       <Button
         icon="pi pi-cog"
         text
         aria-label="Config"
         class="!text-white shrink-0"
         iconClass="!text-xl"
+        @click="redirectToProfile"
       />
     </div>
   </div>
@@ -60,10 +61,27 @@
 
 <script setup>
 import Image from 'primevue/image'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+
+// Leer el username desde el localStorage
+const username = ref('')
+
+onMounted(() => {
+  const userData = JSON.parse(localStorage.getItem('userData'))
+  if (userData && userData.username) {
+    username.value = userData.username
+  } else {
+    username.value = 'Invitado'
+  }
+})
+
+// Redirigir al perfil
+const redirectToProfile = () => {
+  router.push('/profile')
+}
 
 const items = ref([
   {

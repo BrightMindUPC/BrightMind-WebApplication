@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import Components from 'unplugin-vue-components/vite'
-import { PrimeVueResolver } from '@primevue/auto-import-resolver'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import Components from 'unplugin-vue-components/vite';
+import { PrimeVueResolver } from '@primevue/auto-import-resolver';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -11,4 +11,15 @@ export default defineConfig({
       resolvers: [PrimeVueResolver()],
     }),
   ],
-})
+  server: {
+    proxy: {
+      // Proxy para las solicitudes a la API
+      '/api': {
+        target: 'http://localhost:8080', // URL del backend
+        changeOrigin: true, // Cambia el origen de la solicitud
+        secure: false, // Desactiva la verificación SSL en caso de HTTPS local
+        rewrite: (path) => path.replace(/^\/api/, ''), // Opcional, reescribe el prefijo
+      },
+    },
+  },
+});

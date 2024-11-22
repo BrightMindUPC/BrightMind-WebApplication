@@ -5,6 +5,8 @@ import RootLayout from '../public/layout/RootLayout.vue'
 import ResourceDetailPage from '../resources/pages/ResourceDetailPage.vue'
 import ChatbotMainPage from '../chatbot-search/pages/ChatbotMainPage.vue'
 import EducationalResources from '../public/pages/EducationalResources.vue'
+import LoginPage from '../login-register/pages/LoginPage.vue'
+import RegisterPage from '../login-register/pages/RegisterPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -13,6 +15,14 @@ const router = createRouter({
       path: '/',
       component: RootLayout,
       children: [
+        {
+          path: '/login',
+          component: LoginPage,
+        },
+        {
+          path: '/register',
+          component: RegisterPage,
+        },
         {
           path: '/example',
           component: ExamplePage,
