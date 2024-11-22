@@ -48,26 +48,41 @@
       />
       <p class="font-semibold w-full">{{ username }}</p>
       <Button
-        icon="pi pi-cog"
-        text
-        aria-label="Config"
-        class="!text-white shrink-0"
-        iconClass="!text-xl"
-        @click="redirectToProfile"
+      icon="pi pi-cog"
+      text
+      aria-label="Config"
+      class="!text-white shrink-0 hover:bg-gray-300"
+      iconClass="!text-xl"
+      @click="goToUserSettings"
+    />
+
+    </div>
+    <!-- Nuevo botón de notificaciones -->
+    <div class="mt-4">
+      <Button
+        icon="pi pi-bell"
+        label="Ver todas las notificaciones"
+        class="!bg-blue-500 !text-white w-full"
+        @click="goToNotifications"
       />
     </div>
   </div>
+
+  <!-- Componente de Notificaciones -->
+  <FloatingNotifications v-if="showNotifications" @close="toggleNotifications" />
 </template>
 
 <script setup>
 import Image from 'primevue/image'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import FloatingNotifications from '../components/FloatingNotifications.vue'
 
 const router = useRouter()
 
 // Leer el username desde el localStorage
 const username = ref('')
+const showNotifications = ref(false) // Estado para mostrar u ocultar notificaciones
 
 onMounted(() => {
   const userData = JSON.parse(localStorage.getItem('userData'))
@@ -78,10 +93,19 @@ onMounted(() => {
   }
 })
 
-// Redirigir al perfil
-const redirectToProfile = () => {
-  router.push('/profile')
+const goToUserSettings = () => {
+  router.push({ name: 'UserSettingsPage' })
 }
+
+// Mostrar u ocultar el componente de notificaciones
+const toggleNotifications = () => {
+  showNotifications.value = !showNotifications.value
+}
+
+const goToNotifications = () => {
+  router.push('/notifications')
+}
+
 
 const items = ref([
   {

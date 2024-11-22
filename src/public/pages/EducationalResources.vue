@@ -5,51 +5,40 @@
       Bienvenido al centro de recursos educativos
     </h1>
 
-    <!-- Barra de búsqueda -->
-    <div class="mb-4">
-      <input
-        type="text"
-        placeholder="Busca tu material de estudio"
-        class="w-full p-2 border rounded"
-        v-model="searchQuery"
-      />
-    </div>
-
     <!-- Filtros -->
-    <div class="flex gap-4 mb-6">
-      <!-- Materia -->
+    <div class="mb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Filtro por Grado -->
       <div>
-        <label class="block font-medium mb-1">Materia</label>
-        <select class="p-2 border rounded w-full" v-model="filters.subject">
-          <option>Matemática</option>
-          <option>Física</option>
-          <option>Química</option>
+        <label class="block text-sm font-medium text-gray-700">Grado</label>
+        <select
+          v-model="filters.grade"
+          @change="applyFilters"
+          class="mt-1 block w-full p-2 border rounded-md"
+        >
+          <option value="">Todos</option>
+          <option value="FIRST_YEAR">Primero</option>
+          <option value="SECOND_YEAR">Segundo</option>
+          <option value="THIRD_YEAR">Tercero</option>
+          <option value="FOURTH_YEAR">Cuarto</option>
+          <option value="FIFTH_YEAR">Quinto</option>
         </select>
       </div>
 
-      <!-- Nivel académico -->
+      <!-- Filtro por Materia -->
       <div>
-        <label class="block font-medium mb-1">Nivel académico</label>
+        <label class="block text-sm font-medium text-gray-700">Materia</label>
         <select
-          class="p-2 border rounded w-full"
-          v-model="filters.academicLevel"
+          v-model="filters.subject"
+          @change="applyFilters"
+          class="mt-1 block w-full p-2 border rounded-md"
         >
-          <option>Secundaria</option>
-          <option>Primaria</option>
-          <option>Universidad</option>
-        </select>
-      </div>
-
-      <!-- Tipo de recurso -->
-      <div>
-        <label class="block font-medium mb-1">Tipo de recurso</label>
-        <select
-          class="p-2 border rounded w-full"
-          v-model="filters.resourceType"
-        >
-          <option>Ejercicios</option>
-          <option>Teoría</option>
-          <option>Práctica</option>
+          <option value="">Todas</option>
+          <option value="MATH">Matemáticas</option>
+          <option value="SCIENCE">Ciencias</option>
+          <option value="LITERATURE">Literatura</option>
+          <option value="HISTORY">Historia</option>
+          <option value="PHYSICS">Física</option>
+          <option value="CHEMISTRY">Química</option>
         </select>
       </div>
     </div>
@@ -59,38 +48,54 @@
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
     >
       <div
-        v-for="resource in filteredResources"
+        v-for="resource in resources"
         :key="resource.id"
         class="bg-blue-100 p-4 rounded shadow flex flex-col cursor-pointer"
-        @click="openResource(resource)"
+        @click="selectResource(resource)"
       >
-        <div class="flex items-center justify-between mb-2">
-          <!-- Icono -->
-          <div class="text-4xl text-blue-500">{{ resource.icon }}</div>
-
-          <!-- Etiqueta -->
-          <span class="bg-blue-300 text-xs font-bold rounded-full px-2 py-1">{{
-            resource.type
-          }}</span>
-        </div>
-
         <!-- Título -->
         <h2 class="text-lg font-semibold">{{ resource.title }}</h2>
 
-        <!-- Descripción -->
+        <!-- Materia -->
         <p class="text-sm text-gray-600 mt-1">
-          {{ resource.description }}
+          Materia: {{ resource.subjectTranslated }}
         </p>
 
-        <!-- Barra de progreso -->
-        <div class="mt-auto pt-4">
-          <div class="h-2 bg-gray-200 rounded-full">
-            <div
-              class="h-2 bg-blue-500 rounded-full"
-              :style="{ width: resource.progress + '%' }"
-            ></div>
-          </div>
-          <p class="text-right text-sm mt-1">{{ resource.progress }}%</p>
+        <!-- Grado académico -->
+        <p class="text-sm text-gray-600">
+          Nivel académico: {{ resource.gradeTranslated }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div
+      v-if="selectedResource"
+      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-start justify-center z-50 pt-10"
+      @click.self="closeModal"
+    >
+      <div class="bg-white rounded-lg shadow-lg w-5/6 max-w-5xl p-6 relative">
+        <!-- Botón de cerrar -->
+        <button
+          class="absolute top-4 right-4 text-red-600 font-bold text-2xl hover:text-red-800"
+          @click="closeModal"
+        >
+          ✕
+        </button>
+
+        <!-- Información del recurso -->
+        <h2 class="text-2xl font-bold mb-4">{{ selectedResource.title }}</h2>
+        <p><strong>Materia:</strong> {{ selectedResource.subjectTranslated }}</p>
+        <p><strong>Grado:</strong> {{ selectedResource.gradeTranslated }}</p>
+
+        <!-- Visor de PDF -->
+        <div class="mt-4">
+          <h3 class="font-bold mb-2">Vista previa del recurso:</h3>
+          <iframe
+            :src="pdfUrl"
+            class="w-full h-[80vh] border rounded"
+            frameborder="0"
+          ></iframe>
         </div>
       </div>
     </div>
@@ -98,186 +103,93 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: 'ResourceCenter',
+  name: "ResourceCenter",
   data() {
     return {
-      searchQuery: '',
+      resources: [],
+      selectedResource: null,
+      pdfUrl: "",
       filters: {
-        subject: 'Matemática',
-        academicLevel: 'Secundaria',
-        resourceType: 'Ejercicios',
+        grade: "",
+        subject: "",
       },
-      resources: [
-        {
-          id: 1,
-          title: 'Funciones derivadas',
-          description:
-            'Practica el cálculo de derivadas y refuerza tus conocimientos sobre las reglas básicas de diferenciación.',
-          icon: '√x',
-          type: 'Ejercicio',
-          subject: 'Matemática',
-          academicLevel: 'Secundaria',
-          resourceType: 'Ejercicios',
-          progress: 20,
-        },
-        {
-          id: 2,
-          title: 'Límites y continuidad',
-          description:
-            'Refuerza tus conocimientos sobre límites y continuidad en funciones matemáticas.',
-          icon: '∞',
-          type: 'Teoría',
-          subject: 'Matemática',
-          academicLevel: 'Secundaria',
-          resourceType: 'Teoría',
-          progress: 50,
-        },
-        {
-          id: 3,
-          title: 'Ecuaciones cuadráticas',
-          description:
-            'Aprende a resolver ecuaciones cuadráticas y aplica técnicas de factorización.',
-          icon: 'x²',
-          type: 'Práctica',
-          subject: 'Matemática',
-          academicLevel: 'Secundaria',
-          resourceType: 'Práctica',
-          progress: 30,
-        },
-        {
-          id: 4,
-          title: 'Leyes de Newton',
-          description:
-            'Explora las tres leyes de Newton y cómo afectan el movimiento de los objetos.',
-          icon: 'F=ma',
-          type: 'Teoría',
-          subject: 'Física',
-          academicLevel: 'Secundaria',
-          resourceType: 'Teoría',
-          progress: 75,
-        },
-        {
-          id: 5,
-          title: 'Problemas de dinámica',
-          description:
-            'Practica la resolución de problemas de dinámica aplicando las leyes de Newton.',
-          icon: 'ΣF',
-          type: 'Ejercicio',
-          subject: 'Física',
-          academicLevel: 'Secundaria',
-          resourceType: 'Ejercicios',
-          progress: 40,
-        },
-        {
-          id: 6,
-          title: 'Enlace iónico y covalente',
-          description:
-            'Distingue entre enlaces iónicos y covalentes y aprende sus características.',
-          icon: 'e⁻',
-          type: 'Teoría',
-          subject: 'Química',
-          academicLevel: 'Secundaria',
-          resourceType: 'Teoría',
-          progress: 60,
-        },
-        {
-          id: 7,
-          title: 'Tabla periódica',
-          description:
-            'Conoce la estructura de la tabla periódica y cómo se organizan los elementos.',
-          icon: 'H₂O',
-          type: 'Teoría',
-          subject: 'Química',
-          academicLevel: 'Secundaria',
-          resourceType: 'Teoría',
-          progress: 90,
-        },
-        {
-          id: 8,
-          title: 'Reacciones químicas',
-          description:
-            'Aprende a balancear reacciones químicas y a identificar reactivos y productos.',
-          icon: '→',
-          type: 'Práctica',
-          subject: 'Química',
-          academicLevel: 'Secundaria',
-          resourceType: 'Práctica',
-          progress: 50,
-        },
-        {
-          id: 9,
-          title: 'Geometría analítica',
-          description:
-            'Estudia la geometría en el plano cartesiano y trabaja con ecuaciones de rectas.',
-          icon: '(x,y)',
-          type: 'Ejercicio',
-          subject: 'Matemática',
-          academicLevel: 'Secundaria',
-          resourceType: 'Ejercicios',
-          progress: 25,
-        },
-        {
-          id: 10,
-          title: 'Trabajo y energía',
-          description:
-            'Analiza el concepto de trabajo y energía en diferentes sistemas físicos.',
-          icon: 'W=Fd',
-          type: 'Teoría',
-          subject: 'Física',
-          academicLevel: 'Secundaria',
-          resourceType: 'Teoría',
-          progress: 65,
-        },
-        {
-          id: 11,
-          title: 'Estática y equilibrio',
-          description:
-            'Explora el equilibrio de fuerzas y condiciones de estática en objetos rígidos.',
-          icon: '∑τ=0',
-          type: 'Ejercicio',
-          subject: 'Física',
-          academicLevel: 'Secundaria',
-          resourceType: 'Ejercicios',
-          progress: 15,
-        },
-        {
-          id: 12,
-          title: 'Teoría de conjuntos',
-          description:
-            'Comprende los fundamentos de la teoría de conjuntos y operaciones entre ellos.',
-          icon: '∩ ∪',
-          type: 'Teoría',
-          subject: 'Matemática',
-          academicLevel: 'Secundaria',
-          resourceType: 'Teoría',
-          progress: 85,
-        },
-        // Agrega más recursos aquí según sea necesario
-      ],
-    }
-  },
-  computed: {
-    filteredResources() {
-      return this.resources.filter((resource) => {
-        return (
-          resource.subject === this.filters.subject &&
-          resource.academicLevel === this.filters.academicLevel &&
-          resource.resourceType === this.filters.resourceType &&
-          resource.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-        )
-      })
-    },
+    };
   },
   methods: {
-    openResource(resource) {
-      this.$router.push({
-        name: 'ResourceDetailPage',
-        params: { id: resource.id },
-      })
+    async fetchResources() {
+      try {
+        let url = "http://localhost:8080/api/resources/api/resources";
+        if (this.filters.grade && this.filters.subject) {
+          url += `/grade/${this.filters.grade}/subject/${this.filters.subject}`;
+        } else if (this.filters.grade) {
+          url += `/grade/${this.filters.grade}`;
+        } else if (this.filters.subject) {
+          url += `/subject/${this.filters.subject}`;
+        }
+
+        const response = await axios.get(url);
+
+        // Mapear y traducir los datos
+        this.resources = response.data.map((resource) => ({
+          id: resource.id,
+          title: resource.title,
+          subject: resource.subject,
+          grade: resource.grade,
+          subjectTranslated: this.translateSubject(resource.subject),
+          gradeTranslated: this.translateGrade(resource.grade),
+        }));
+      } catch (error) {
+        console.error("Error al cargar los recursos:", error);
+      }
+    },
+    translateSubject(subject) {
+      const subjects = {
+        MATH: "Matemáticas",
+        SCIENCE: "Ciencias",
+        LITERATURE: "Literatura",
+        HISTORY: "Historia",
+        PHYSICS: "Física",
+        CHEMISTRY: "Química",
+      };
+      return subjects[subject] || subject;
+    },
+    translateGrade(grade) {
+      const grades = {
+        FIRST_YEAR: "Primero",
+        SECOND_YEAR: "Segundo",
+        THIRD_YEAR: "Tercero",
+        FOURTH_YEAR: "Cuarto",
+        FIFTH_YEAR: "Quinto",
+      };
+      return grades[grade] || grade;
+    },
+    applyFilters() {
+      this.fetchResources();
+    },
+    selectResource(resource) {
+      this.selectedResource = resource;
+      this.pdfUrl = `http://localhost:8080/api/resources/api/resources/${resource.id}/view`;
+    },
+    closeModal() {
+      this.selectedResource = null;
+      this.pdfUrl = "";
     },
   },
-}
+  mounted() {
+    this.fetchResources();
+  },
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Opcional: Añadir sombra y efecto al botón de cerrar */
+button.absolute {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+button.absolute:hover {
+  transform: scale(1.1);
+}
+</style>

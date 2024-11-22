@@ -54,7 +54,7 @@
     },
     methods: {
       async handleLogin() {
-        const apiUrl = `http://localhost:8080/api/users/email/${this.email}`;
+        const apiUrl = `http://localhost:8080/api/users/api/users/email/${this.email}`;
   
         try {
           // Limpiar el localStorage antes de iniciar sesión
@@ -70,7 +70,7 @@
             console.log("Datos guardados en localStorage:", response.data);
   
             // Redirige al usuario después del login
-            this.$router.push("/dashboard"); // Asegúrate de tener una ruta configurada para el dashboard
+            this.$router.push("/main"); // Asegúrate de tener una ruta configurada para el dashboard
           } else {
             console.error("Respuesta de la API no válida:", response);
             alert("No se pudo iniciar sesión. Verifique su información.");

@@ -7,22 +7,33 @@ import ChatbotMainPage from '../chatbot-search/pages/ChatbotMainPage.vue'
 import EducationalResources from '../public/pages/EducationalResources.vue'
 import LoginPage from '../login-register/pages/LoginPage.vue'
 import RegisterPage from '../login-register/pages/RegisterPage.vue'
+import NotificationsPage from '../public/pages/NotificationsPage.vue'
+import UserSettingsPage from '../public/pages/UserSettingsPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
       path: '/',
+      component: LoginPage, // Directamente renderizamos LoginPage en "/"
+    },
+    {
+      path: '/register',
+      component: RegisterPage,
+    },
+    {
+      path: '/main',
       component: RootLayout,
       children: [
         {
-          path: '/login',
-          component: LoginPage,
+          path: '/notifications',
+          component: NotificationsPage,
         },
         {
-          path: '/register',
-          component: RegisterPage,
-        },
+          path: '/user-settings',
+          name: 'UserSettingsPage',
+          component: UserSettingsPage,
+        },        
         {
           path: '/example',
           component: ExamplePage,
@@ -42,7 +53,6 @@ const router = createRouter({
         },
       ],
     },
-
     {
       path: '/:pathMatch(.*)*',
       component: NotFoundPage,

@@ -15,6 +15,7 @@
     "primevue": "^4.1.1",
     "tailwindcss-primeui": "^0.3.4",
     "vue": "^3.5.12",
+    "vue-advanced-chat": "^2.1.0",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
