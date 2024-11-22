@@ -18,16 +18,6 @@
       </div>
     </div>
 
-    <!-- Barra de entrada de mensajes (bloqueada) -->
-    <div class="flex items-center mt-2 w-full p-4 bg-white border-t border-gray-200 sticky bottom-0 pointer-events-none">
-      <InputText 
-        disabled 
-        placeholder="La interacción está deshabilitada." 
-        class="w-full p-inputtext-lg bg-gray-200 cursor-not-allowed"
-      />
-      <Button icon="pi pi-send" class="ml-2" disabled />
-    </div>
-
     <!-- Voiceflow Widget -->
     <div id="voiceflow-container" class="hidden"></div>
   </div>

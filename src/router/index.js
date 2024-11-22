@@ -9,6 +9,7 @@ import LoginPage from '../login-register/pages/LoginPage.vue'
 import RegisterPage from '../login-register/pages/RegisterPage.vue'
 import NotificationsPage from '../public/pages/NotificationsPage.vue'
 import UserSettingsPage from '../public/pages/UserSettingsPage.vue'
+import PlanesEstudioPage from '../public/pages/PlanesEstudioPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -28,6 +29,11 @@ const router = createRouter({
         {
           path: '/notifications',
           component: NotificationsPage,
+        },
+        {
+          path: '/planes-de-estudio',
+          name: 'PlanesEstudio',
+          component: PlanesEstudioPage, // Asocia la ruta con el componente
         },
         {
           path: '/user-settings',
@@ -50,7 +56,7 @@ const router = createRouter({
         {
           path: '/chatbot',
           component: ChatbotMainPage,
-        },
+        }, 
       ],
     },
     {

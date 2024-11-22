@@ -50,7 +50,8 @@
       <div
         v-for="resource in resources"
         :key="resource.id"
-        class="bg-blue-100 p-4 rounded shadow flex flex-col cursor-pointer"
+        :style="{ backgroundColor: subjectColors[resource.subject] || '#ffffff' }"
+        class="p-4 rounded shadow flex flex-col cursor-pointer h-48"
         @click="selectResource(resource)"
       >
         <!-- Título -->
@@ -115,6 +116,14 @@ export default {
       filters: {
         grade: "",
         subject: "",
+      },
+      subjectColors: {
+        MATH: "#FFEBEE", // Rojo claro
+        SCIENCE: "#E8F5E9", // Verde claro
+        LITERATURE: "#FFF3E0", // Naranja claro
+        HISTORY: "#E3F2FD", // Azul claro
+        PHYSICS: "#F3E5F5", // Morado claro
+        CHEMISTRY: "#FFCDD2", // Rosa claro
       },
     };
   },
@@ -185,11 +194,8 @@ export default {
 </script>
 
 <style scoped>
-/* Opcional: Añadir sombra y efecto al botón de cerrar */
-button.absolute {
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-button.absolute:hover {
-  transform: scale(1.1);
+/* Igualar tamaños de las tarjetas */
+div[class*="resource"] {
+  height: 12rem; /* Tamaño fijo */
 }
 </style>
